@@ -50,11 +50,12 @@ export const secondPrioritiesCalc = (stack: ParsedLineType): ParsedLineType => {
   return result;
 };
 
-export const thirdPrioritiesCalc = (stack: ParsedLineType): number => {
-  let result = 0;
+export const thirdPrioritiesCalc = (stack: ParsedLineType): ParsedLineType => {
+  let result = [];
   for (let key = 0; key < stack.length; key++) {
     if (key === 0) {
-      result = Number(stack[key]);
+      result = [];
+      result.push(Number(stack[key]));
     }
 
     const prevItem = result;
@@ -62,8 +63,31 @@ export const thirdPrioritiesCalc = (stack: ParsedLineType): number => {
     const nextItem = stack[key];
 
     if (!isNumber(String(item)) && mathOperatorsPriorities[item] === THIRD) {
-      result = mathOperators[item](Number(prevItem), Number(nextItem));
+      result = [];
+      result.push(mathOperators[item](Number(prevItem), Number(nextItem)));
     }
   }
+  return result;
+};
+
+const prioritiesCalc = [
+  firstPrioritiesCalc,
+  secondPrioritiesCalc,
+  thirdPrioritiesCalc,
+];
+
+export const calculation = (stack: ParsedLineType): number => {
+  let result: number;
+  let iterationStack: ParsedLineType = stack;
+
+  for (let i = 0; i < prioritiesCalc.length; i++) {
+    const calc = prioritiesCalc[i];
+    iterationStack = calc(iterationStack);
+
+    if (iterationStack.length === 1) {
+      result = Number(calc(iterationStack)[0]);
+    }
+  }
+
   return result;
 };

@@ -9,7 +9,7 @@
     "build": "npx webpack --mode production",
     "prepare": "husky install",
     "prettier": "npx prettier --write .",
-    "check": "npm test && npm run eslint && npm run prettier",
+    "check": "npm run prettier && npm run eslint && npm test",
     "tsc": "npx tsc src/index.ts",
     "start": "npx ts-node src/lesson2"
   },
